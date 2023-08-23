@@ -501,35 +501,52 @@
 
   <script>
     window.onload = function () {
-      document.getElementById('contact-form').addEventListener('submit', function (event) {
-        event.preventDefault();
+  document.getElementById('contact-form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-        var templateParams = {
-          name: document.getElementById('contact-name').value,
-          email: document.getElementById('contact-email').value,
-          subject: document.getElementById('contact-subject').value,
-          message: document.getElementById('contact-message').value
-        };
+    var nameInput = document.getElementById('contact-name');
+    var emailInput = document.getElementById('contact-email');
+    var subjectInput = document.getElementById('contact-subject');
+    var messageInput = document.getElementById('contact-message');
 
-        emailjs.send("service_onmoutl", "template_fop58tb", templateParams, "liHvJrQ_IbUwfchVR")
-          .then(function (response) {
-            swal({
-              title: "Sent Successfully!",
-              icon: "success",
-            }).then(function () {
-              // Reload the page after showing the success message
-              location.reload();
-            });
-            console.log('SUCCESS!', response.status, response.text);
-          }, function (error) {
-            swal({
-              title: "Send Failed",
-              icon: "error",
-            });
-            console.log('FAILED...', error);
-          });
+    // Check if any of the required fields are empty
+    if (!nameInput.value || !emailInput.value || !subjectInput.value || !messageInput.value) {
+      swal({
+        title: "Fields Incomplete",
+        text: "Please fill out all the required fields.",
+        icon: "error",
       });
+      return; // Don't proceed with sending the form
+    }
+
+    var templateParams = {
+      name: nameInput.value,
+      email: emailInput.value,
+      subject: subjectInput.value,
+      message: messageInput.value
     };
+
+    emailjs.send("service_onmoutl", "template_fop58tb", templateParams, "liHvJrQ_IbUwfchVR")
+      .then(function (response) {
+        swal({
+          title: "Sent Successfully!",
+          icon: "success",
+        }).then(function () {
+          // Reload the page after showing the success message
+          location.reload();
+        });
+        console.log('SUCCESS!', response.status, response.text);
+      })
+      .catch(function (error) {
+        swal({
+          title: "Send Failed",
+          icon: "error",
+        });
+        console.log('FAILED...', error);
+      });
+  });
+};
+
   </script>
 </body>
 
